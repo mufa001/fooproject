@@ -6,12 +6,12 @@ pipeline {
                 git 'https://github.com/mufa001/fooproject.git'
             }
         }
-        stage('Junit build') {
+        stage('Build') {
             steps {
                 sh "mvn compile"
             }
         }
-        stage('Junit test') {
+        stage('Test') {
             steps {
                 sh "mvn test"
             }
