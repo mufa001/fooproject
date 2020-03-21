@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/mufa001/fooproject.git'
+                git 'https://github.com/viktornilssoninfotiv/mavenfooproject.git'
             }
         }
         stage('Build') {
@@ -15,20 +15,24 @@ pipeline {
             steps {
                 sh "mvn test"
             }
-        }
-        stage('Newman') {
-            steps {
-                sh 'newman run Muhammad_Farooqi_Restful_Booker.postman_collection.json --environment Muhammad_Farooqi_Restful_Booker.postman_environment.json --reporters junit'
+            post {
+                always {
+                    junit '**/TEST*.xml'
+                }
             }
+        }
+        stage('API testing with Newman') {
+            steps {
+                sh 'newman run Muhammad_Farooqi_Restful_Booker.postman_collection.json --environment Muhammad_Farooqi_Restful_Booker.postman_environment.json --reporters junit'            }
             post {
                 always {
                         junit '**/*xml'
                     }
-             }
+            }
         }
-        stage('Robot') {
-                    steps {
-                        sh 'robot -d Results --variable BROWSER:headlesschrome infotiveCarRetnal.robot'
+        stage('Robot Framework System tests with Selenium') {
+            steps {
+                sh 'robot --variable BROWSER:headlesschrome -d Results infotiveCarRental.robot'
             }
             post {
                 always {
@@ -45,8 +49,9 @@ pipeline {
                                   unstableThreshold   : 40,
                                   otherFiles          : "**/*.png,**/*.jpg",
                                 ]
-                           )
-                      }
+                          )
+                          chuckNorris()
+                    }
                 }
             }
         }
