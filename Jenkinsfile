@@ -6,19 +6,14 @@ pipeline {
                 git 'https://github.com/mufa001/fooproject.git'
             }
         }
-        stage('junit build') {
+        stage('Build') {
             steps {
                 sh "mvn compile"
             }
         }
-        stage('junit test') {
+        stage('Test') {
             steps {
                 sh "mvn test"
-            }
-            post {
-                always {
-                    junit '**/TEST*.xml'
-                }
             }
         }
         stage('newman') {
@@ -29,12 +24,11 @@ pipeline {
                 always {
                         junit '**/*xml'
                     }
-                }
+             }
         }
         stage('robot') {
-            steps {
-                sh 'robot --variable BROWSER:headlesschrome -d Results infotiveCarRetnal.robot'
-                sh 'robot --variable BROWSER:headlesschrome -d Results keywords.robot'
+                    steps {
+                        sh 'robot -d Results --variable BROWSER:headlesschrome infotiveCarRetnal.robot'
             }
             post {
                 always {
@@ -60,12 +54,7 @@ pipeline {
     post {
          always {
             junit '**/TEST*.xml'
-            emailext attachLog: true, attachmentsPattern: '**/TEST*xml',
-            body: 'Bod-DAy!', recipientProviders: [culprits()], subject:
-            '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!'
+             emailext attachLog: true, attachmentsPattern: '**/TEST*xml', body: '', recipientProviders: [culprits()], subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!
          }
     }
 }
-
-      
-
