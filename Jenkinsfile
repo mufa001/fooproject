@@ -16,7 +16,7 @@ pipeline {
                 sh "mvn test"
             }
         }
-       stage('newman') {
+       stage('Newman') {
             steps {
                 sh 'newman run Muhammad_Farooqi_Restful_Booker.postman_collection.json --environment Muhammad_Farooqi_Restful_Booker.postman_environment.json --reporters junit'
             }
@@ -26,7 +26,7 @@ pipeline {
                 }
             }
         }
-        stage('robot') {
+        stage('Robot') {
                     steps {
                         sh 'robot -d results --variable BROWSER:headlesschrome infotivCarRental.robot'
                     }
@@ -55,8 +55,9 @@ pipeline {
     post {
         always {
             junit '**/TEST*.xml'
-            emailext attachLog: true, attachmentsPattern: '**/TEST*xml', body: '', recipientProviders: [culprits()], subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!'
-
+            emailext attachLog: true, attachmentsPattern: '**/TEST*xml',
+            body: 'Bod-DAy!', recipientProviders: [culprits()], subject:
+            '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!'
         }
     }
  }
