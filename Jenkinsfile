@@ -1,67 +1,62 @@
 pipeline {
     agent any
-    stages {
+     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/viktornilssoninfotiv/mavenfooproject.git'
-            }
-        }
+                git 'https://github.com/mufa001/fooproject.git'
+             }
+         }
         stage('Build') {
             steps {
                 sh "mvn compile"
             }
         }
-        stage('Test') {
+       stage('Test') {
             steps {
                 sh "mvn test"
             }
+        }
+       stage('newman') {
+            steps {
+                sh 'newman run Muhammad_Farooqi_Restful_Booker.postman_collection.json --environment Muhammad_Farooqi_Restful_Booker.postman_environment.json --reporters junit'
+            }
             post {
                 always {
-                    junit '**/TEST*.xml'
+                     junit '**/*xml'
                 }
             }
         }
-        stage('API testing with Newman') {
-            steps {
-                sh 'newman run Muhammad_Farooqi_Restful_Booker.postman_collection.json --environment Muhammad_Farooqi_Restful_Booker.postman_environment.json --reporters junit'            }
-            post {
-                always {
-                        junit '**/*xml'
+        stage('robot') {
+                    steps {
+                        sh 'robot -d results --variable BROWSER:headlesschrome infotivCarRental.robot'
                     }
-            }
-        }
-        stage('Robot Framework System tests with Selenium') {
-            steps {
-                sh 'robot --variable BROWSER:headlesschrome -d Results infotiveCarRental.robot'
-            }
-            post {
-                always {
-                    script {
-                          step(
-                                [
-                                  $class              : 'RobotPublisher',
-                                  outputPath          : 'results',
-                                  outputFileName      : '**/output.xml',
-                                  reportFileName      : '**/report.html',
-                                  logFileName         : '**/log.html',
-                                  disableArchiveOutput: false,
-                                  passThreshold       : 50,
-                                  unstableThreshold   : 40,
-                                  otherFiles          : "**/*.png,**/*.jpg",
-                                ]
-                          )
-                          chuckNorris()
+                    post {
+                        always {
+                            script {
+                                  step(
+                                        [
+                                          $class              : 'RobotPublisher',
+                                          outputPath          : 'results',
+                                          outputFileName      : '**/output.xml',
+                                          reportFileName      : '**/report.html',
+                                          logFileName         : '**/log.html',
+                                          disableArchiveOutput: false,
+                                          passThreshold       : 50,
+                                          unstableThreshold   : 40,
+                                          otherFiles          : "**/*.png,**/*.jpg",
+                                        ]
+                                   )
+                            }
+                        }
                     }
                 }
-            }
-        }
     }
+
     post {
-         always {
+        always {
             junit '**/TEST*.xml'
-            emailext attachLog: true, attachmentsPattern: '**/TEST*xml',
-            body: 'Bod-DAy!', recipientProviders: [culprits()], subject:
-            '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!'
-         }
+            emailext attachLog: true, attachmentsPattern: '**/TEST*xml', body: '', recipientProviders: [culprits()], subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!'
+
+        }
     }
-}
+ }
