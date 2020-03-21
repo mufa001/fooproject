@@ -1,63 +1,68 @@
 pipeline {
     agent any
-     stages {
+    stages {
         stage('Checkout') {
             steps {
                 git 'https://github.com/mufa001/fooproject.git'
-             }
-         }
-        stage('Build') {
+            }
+        }
+        stage('Junit build') {
             steps {
                 sh "mvn compile"
             }
         }
-       stage('Test') {
+        stage('Junit test') {
             steps {
                 sh "mvn test"
             }
+            post {
+                always {
+                    junit '**/TEST*.xml'
+                }
+            }
         }
-       stage('Newman') {
+        stage('API testing with Newman') {
             steps {
                 sh 'newman run Muhammad_Farooqi_Restful_Booker.postman_collection.json --environment Muhammad_Farooqi_Restful_Booker.postman_environment.json --reporters junit'
             }
             post {
                 always {
-                     junit '**/*xml'
+                        junit '**/*xml'
+                    }
+            }
+        }
+        stage('Robot Framework System tests with Selenium') {
+            steps {
+                sh 'robot --variable BROWSER:headlesschrome -d Results infotiveCarRental.robot'
+            }
+            post {
+                always {
+                    script {
+                          step(
+                                [
+                                  $class              : 'RobotPublisher',
+                                  outputPath          : 'results',
+                                  outputFileName      : '**/output.xml',
+                                  reportFileName      : '**/report.html',
+                                  logFileName         : '**/log.html',
+                                  disableArchiveOutput: false,
+                                  passThreshold       : 50,
+                                  unstableThreshold   : 40,
+                                  otherFiles          : "**/*.png,**/*.jpg",
+                                ]
+                          )
+                         
+                    }
                 }
             }
         }
-        stage('Robot') {
-                    steps {
-                        sh 'robot -d results --variable BROWSER:headlesschrome infotivCarRental.robot'
-                    }
-                    post {
-                        always {
-                            script {
-                                  step(
-                                        [
-                                          $class              : 'RobotPublisher',
-                                          outputPath          : 'results',
-                                          outputFileName      : '**/output.xml',
-                                          reportFileName      : '**/report.html',
-                                          logFileName         : '**/log.html',
-                                          disableArchiveOutput: false,
-                                          passThreshold       : 50,
-                                          unstableThreshold   : 40,
-                                          otherFiles          : "**/*.png,**/*.jpg",
-                                        ]
-                                   )
-                            }
-                        }
-                    }
-                }
     }
-
     post {
-        always {
+         always {
             junit '**/TEST*.xml'
             emailext attachLog: true, attachmentsPattern: '**/TEST*xml',
             body: 'Bod-DAy!', recipientProviders: [culprits()], subject:
             '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!'
-        }
+         }
     }
- }
+}
