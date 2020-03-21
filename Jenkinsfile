@@ -21,7 +21,7 @@ pipeline {
                 }
             }
         }
-        stage('API testing with Newman') {
+        stage('Newman') {
             steps {
                 sh 'newman run Muhammad_Farooqi_Restful_Booker.postman_collection.json --environment Muhammad_Farooqi_Restful_Booker.postman_environment.json --reporters junit'
             }
@@ -33,7 +33,7 @@ pipeline {
         }
         stage('Robot Framework System tests with Selenium') {
             steps {
-                sh 'robot --variable BROWSER:headlesschrome -d Results infotiveCarRental.robot'
+                sh 'robot -d results--variable BROWSER:headlesschrome infotiveCarRental.robot'
             }
             post {
                 always {
