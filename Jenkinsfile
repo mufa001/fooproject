@@ -16,7 +16,7 @@ pipeline {
                 sh "mvn test"
             }
         }
-        stage('newman') {
+        stage('Newman') {
             steps {
                 sh 'newman run Muhammad_Farooqi_Restful_Booker.postman_collection.json --environment Muhammad_Farooqi_Restful_Booker.postman_environment.json --reporters junit'
             }
@@ -26,7 +26,7 @@ pipeline {
                     }
              }
         }
-        stage('robot') {
+        stage('Robot') {
                     steps {
                         sh 'robot -d Results --variable BROWSER:headlesschrome infotiveCarRetnal.robot'
             }
