@@ -1,6 +1,10 @@
 *** Settings ***
 Library                 SeleniumLibrary
 
+*** Variables ***
+${BROWSER} = chrome
+${URL} =  http://rental11.infotiv.net/
+
 *** Keywords ***
 
 Begin Web Test
