@@ -5,12 +5,12 @@ Library                 SeleniumLibrary
 
 Begin Web Test
 
-        Open Browser                   about:blank   chrome
+        Open Browser                   about:blank   ${BROWSER}
         Maximize Browser Window
         Load Page
         Verify Page Loaded
 Load Page
-        Go To                          http://rental11.infotiv.net/
+        Go To                         ${URL}
 
 Verify Page Loaded
         Wait Until Page Contains        Infotiv Car Rental
