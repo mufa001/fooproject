@@ -5,6 +5,11 @@ Library             SeleniumLibrary
 Test Setup          Begin Web Test
 Test Teardown       End Web Test
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> ea100c89dc18ea18a989a6a5acf78c9cb7f6fd59
 *** Test Cases ***
 
 

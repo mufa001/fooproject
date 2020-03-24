@@ -2,7 +2,11 @@
 Library                 SeleniumLibrary
 
 *** Variables ***
+<<<<<<< HEAD
 ${BROWSER} = chrome
+=======
+${BROWSER} =  chrome
+>>>>>>> ea100c89dc18ea18a989a6a5acf78c9cb7f6fd59
 ${URL} =  http://rental11.infotiv.net/
 
 *** Keywords ***
@@ -15,7 +19,6 @@ Begin Web Test
         Verify Page Loaded
 Load Page
         Go To                                        ${URL}
-
 Verify Page Loaded
         Wait Until Page Contains        Infotiv Car Rental
 
@@ -78,17 +81,17 @@ Booking Car
         Click Element                        id:rightpane
         Sleep                                2s
         Click Element                        id:carSelect1
-        ${pickup_date} =                    Get Text                id:startDate
-        Should Be Equal                     ${pickup_date}          Pickup date: 2020-03-28
-        ${return_date} =                    Get Text                id:endDate
-        Should Be Equal                     ${return_date}          Return date: 2020-03-30
+        ${pickup_date} =                     Get Text                id:startDate
+        Should Be Equal                      ${pickup_date}          Pickup date: 2020-03-28
+        ${return_date} =                     Get Text                id:endDate
+        Should Be Equal                      ${return_date}          Return date: 2020-03-30
         Input Text                          id:cardNum              1234234534564567
         Input Text                          id:fullName             M Farooqi
-        Select From List By Index            xpath://*[@id="confirmSelection"]/form/select[1]    2
-        Select From List By Index            xpath://*[@id="confirmSelection"]/form/select[2]    5
-        Input Text                           id:cvc               786
-        Click Button                         id:confirm
-        Wait Until Page Contains             now ready for pickup
+        Select From List By Index           xpath://*[@id="confirmSelection"]/form/select[1]    2
+        Select From List By Index           xpath://*[@id="confirmSelection"]/form/select[2]    5
+        Input Text                          id:cvc               786
+        Click Button                        id:confirm
+        Wait Until Page Contains            now ready for pickup
 
 
 
