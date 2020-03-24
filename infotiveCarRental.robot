@@ -6,7 +6,7 @@ Test Setup          Begin Web Test
 Test Teardown       End Web Test
 
 *** Variables ***
-${BROWSER} =  chrome
+${BROWSER} = chrome
 ${URL} =  http://rental11.infotiv.net/
 
 *** Test Cases ***
